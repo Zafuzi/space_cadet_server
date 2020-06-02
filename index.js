@@ -10,18 +10,23 @@ const app = express();
 const here = require("path").dirname( module.filename );
 L.D( "here=" + here );
 
+if(!DS.players) {
+	DS.players = [];
+}
+
 app.get("*", (req, res) => {
-	res.send(ds);
+	res.json({players: DS.players || []});
 });
 
 app.post("/", (req, res) => {
 	let id = req.body.id;
 	let pos = req.body.pos;
 	if( id && pos ) {
-		ds[id] = pos
-		ds.save();	
+		DS.players[id] = pos
+		DS.save();	
+		res.json({okay: 200});
 	} else {
-		res.send({FUCK_YOU: "MISSING SOME SHIT YA KNOW"});
+		res.json({FUCK_YOU: "MISSING SOME SHIT YA KNOW"});
 	}
 });
 
